@@ -5,7 +5,7 @@ import {
   currentDaysNoScroll,
   maxDaysNoScroll
 } from './const';
-import './toe-touching.css';
+import './daily-goals.css';
 
 const getDayOfYear = () => {
   const currentDate = new Date();

@@ -1,132 +1,79 @@
-import {
-  currentYear,
-  completedDays,
-  months,
-  currentDaysNoScroll,
-  maxDaysNoScroll
-} from './const';
-import './daily-goals.css';
+const year = new Date().getFullYear();
+const months = Array.from({ length: 12 }, (_, monthIndex) => {
+  const days = new Date(year, monthIndex + 1, 0).getDate();
+  const label = new Date(year, monthIndex, 1).toLocaleString('default', {
+    month: 'short'
+  });
+  return { days, label };
+});
+const maxDays = Math.max(...months.map((m) => m.days));
 
-const getDayOfYear = () => {
-  const currentDate = new Date();
-  const startOfYear = new Date(currentDate.getFullYear(), 0, 0); // January 1st of the current year
-  const diff = currentDate.getTime() - startOfYear.getTime();
-  const oneDay = 1000 * 60 * 60 * 24; // Milliseconds in a day
+const transparent = 'rgba(255,255,255,0)';
 
-  const dayOfYear = Math.floor(diff / oneDay);
-
-  return dayOfYear;
+const testGrid: { [key: string]: number[] } = {
+  jan: [4],
+  feb: [],
+  mar: [],
+  apr: [],
+  may: [],
+  jun: [],
+  jul: [],
+  aug: [],
+  sep: [],
+  oct: [],
+  nov: [],
+  dec: []
 };
-
-const generateStreaks = () => {
-  const streaks = Object.values(completedDays)
-    .flat(1)
-    .reduce(
-      (acc, curr) => {
-        if (curr === null) {
-          // If a null is found, start a new subarray
-          acc.push([]);
-        } else {
-          // Add the current value to the last subarray
-          if (acc.length === 0 || acc[acc.length - 1].length === 0) {
-            acc[acc.length - 1].push(curr);
-          } else {
-            acc[acc.length - 1].push(curr);
-          }
-        }
-        return acc;
-      },
-      [[]] as (number | null)[][]
-    );
-
-  // Remove the first empty array
-  if (streaks[0].length === 0) {
-    streaks.shift();
-  }
-
-  return streaks;
-};
-
-const Day = ({ day, month }: { day: number; month: number }) => {
-  const today = new Date();
-  const classes = ['day'];
-  if (
-    today.getFullYear() === currentYear &&
-    today.getMonth() === month &&
-    today.getDate() === day
-  ) {
-    classes.push('today');
-  }
-  if (
-    completedDays[month + 1].length > 0 &&
-    completedDays[month + 1].includes(day)
-  ) {
-    classes.push('completed');
-  }
-  return <div className={classes.join(' ')}>{day}</div>;
-};
-
-const Month = ({
-  monthName,
-  monthIdx
-}: {
-  monthName: string;
-  monthIdx: number;
-}) => {
-  const firstDayOfMonth = new Date(currentYear, monthIdx, 1);
-  const lastDayOfMonth = new Date(currentYear, monthIdx + 1, 0);
-  const numDaysInMonth = lastDayOfMonth.getDate();
-  const firstDayOfWeek = firstDayOfMonth.getDay();
-
-  return (
-    <div className="month">
-      <h3>{monthName}</h3>
-      <div className="days">
-        {Array.from({ length: firstDayOfWeek }).map((_) => (
-          <div className="day" />
-        ))}
-        {Array.from({ length: numDaysInMonth }).map((_, day) => (
-          <Day day={day + 1} month={monthIdx} />
-        ))}
-      </div>
-    </div>
-  );
-};
-
-const Calendar = () => {
-  return (
-    <div id="calendar">
-      {months.map((monthName, idx) => (
-        <Month monthName={monthName} monthIdx={idx} />
-      ))}
-    </div>
-  );
-};
-
-const ToeTouching = () => {
-  const streaks = generateStreaks();
+const DailyGoals = () => {
   return (
     <div>
-      <div>
-        <h1>Did McKay Try Touching His Toes Every Day For a Full Year?</h1>
-        <h3 className="subtitle">
-          A red slash through the date means McKay tried touching his toes that
-          day
-        </h3>
-        <h3>Day {getDayOfYear()}</h3>
-        <h3 id="streak">
-          Current stretch streak length: {streaks[streaks.length - 1].length}
-        </h3>
-        <h3 id="streak">
-          Longest streak:{' '}
-          {streaks.sort((a, b) => b.length - a.length)[0].length}
-        </h3>
-        <h3>Consecutive days without doomscrolling: {currentDaysNoScroll}</h3>
-        <h3>Max no-scroll streak: {maxDaysNoScroll}</h3>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(12, 1fr)',
+          padding: '16px'
+        }}
+      >
+        {/* Header row */}
+        {months.map((month, i) => (
+          <div
+            key={`header-${i}`}
+            style={{
+              textAlign: 'center',
+              border: '1px solid black'
+            }}
+          >
+            {month.label}
+          </div>
+        ))}
+        {Array.from({ length: maxDays }).map((_, dayIndex) => {
+          // debugger;
+          return months.map((month, monthIndex) => {
+            const value = testGrid[month.label.toLowerCase()][dayIndex];
+
+            const color = value
+              ? `rgba(50,200,50,${value ? value / 4 : 1})`
+              : transparent;
+            return (
+              <div
+                key={`${monthIndex}-${dayIndex}`}
+                style={{
+                  margin: '1px',
+                  aspectRatio: '1 / 1',
+                  border: '1px solid black',
+                  visibility: dayIndex < month.days ? 'visible' : 'hidden',
+                  backgroundColor: color
+                  //   backgroundColor: `rgba(0,${testGrid[month.label.toLowerCase()][dayIndex] || 255},0,${(testGrid[month.label.toLowerCase()][dayIndex] || 0) / 4})`
+                }}
+              >
+                {dayIndex + 1}
+              </div>
+            );
+          });
+        })}
       </div>
-      <Calendar />
     </div>
   );
 };
 
-export default ToeTouching;
+export default DailyGoals;

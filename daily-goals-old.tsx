@@ -4,7 +4,7 @@ import {
   months,
   currentDaysNoScroll,
   maxDaysNoScroll
-} from './const';
+} from './const-old';
 import './daily-goals.css';
 
 const getDayOfYear = () => {

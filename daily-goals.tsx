@@ -1,75 +1,113 @@
-const year = new Date().getFullYear();
-const months = Array.from({ length: 12 }, (_, monthIndex) => {
-  const days = new Date(year, monthIndex + 1, 0).getDate();
-  const label = new Date(year, monthIndex, 1).toLocaleString('default', {
-    month: 'short'
-  });
-  return { days, label };
-});
-const maxDays = Math.max(...months.map((m) => m.days));
+import { useState, useEffect } from 'react';
+import { goals } from './goalData';
+import {
+  colors,
+  months,
+  maxDays,
+  transparent,
+  goalNames,
+  monthLabel,
+  dayOfMonth
+} from './const';
+import { checkCriteria, handleKeyDown } from './utils';
 
-const transparent = 'rgba(255,255,255,0)';
-
-const testGrid: { [key: string]: number[] } = {
-  jan: [4],
-  feb: [],
-  mar: [],
-  apr: [],
-  may: [],
-  jun: [],
-  jul: [],
-  aug: [],
-  sep: [],
-  oct: [],
-  nov: [],
-  dec: []
-};
 const DailyGoals = () => {
+  const [selectedGoalIndex, setSelectedGoalIndex] = useState<number>(0);
+  const selectedGoalName = goalNames[selectedGoalIndex];
+
+  const criteria = goals[selectedGoalName].criteria;
+  function handleKeyDownEvent(event: any) {
+    handleKeyDown(event, setSelectedGoalIndex);
+  }
+
+  useEffect(() => {
+    // This code only runs in the browser after mounting
+    document.addEventListener('keydown', handleKeyDownEvent);
+
+    // The return function handles cleanup (runs on unmount)
+    return () => {
+      document.removeEventListener('keydown', handleKeyDownEvent);
+    };
+  }, []); // Empty dependency array ensures it runs once on mount and once on unmount
+
   return (
     <div>
+      <div>
+        {goalNames.map((goalName, index) => {
+          const hasTodayData =
+            goals[goalName]?.data?.[monthLabel]?.[dayOfMonth] !== undefined;
+          return (
+            <span key={goalName} style={{ margin: '8px' }}>
+              <button
+                onClick={() => setSelectedGoalIndex(index)}
+                type="button"
+                style={{
+                  border: '1px solid black',
+                  backgroundColor:
+                    selectedGoalIndex === index ? 'lightblue' : 'white',
+                  color: hasTodayData ? 'black' : 'red',
+                  padding: '4px'
+                }}
+              >
+                {goals[goalName].criteria.isInverted ? 'less ' : ''}
+                {goalName}
+              </button>
+            </span>
+          );
+        })}
+      </div>
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(12, 1fr)',
-          padding: '16px'
+          gridTemplateColumns: `repeat(${maxDays + 1}, 1fr)`,
+          padding: '16px',
+          maxWidth: '600px'
         }}
       >
-        {/* Header row */}
-        {months.map((month, i) => (
-          <div
-            key={`header-${i}`}
-            style={{
-              textAlign: 'center',
-              border: '1px solid black'
-            }}
-          >
-            {month.label}
-          </div>
-        ))}
-        {Array.from({ length: maxDays }).map((_, dayIndex) => {
-          // debugger;
-          return months.map((month, monthIndex) => {
-            const value = testGrid[month.label.toLowerCase()][dayIndex];
+        {months.map((month, monthIndex) => {
+          const labelCell = (
+            <div
+              key={`label-${monthIndex}`}
+              style={{
+                textAlign: 'center',
+                border: '1px solid black',
+                margin: '1px',
+                padding: '4px'
+              }}
+            >
+              {month.label}
+            </div>
+          );
 
-            const color = value
-              ? `rgba(50,200,50,${value ? value / 4 : 1})`
-              : transparent;
-            return (
-              <div
-                key={`${monthIndex}-${dayIndex}`}
-                style={{
-                  margin: '1px',
-                  aspectRatio: '1 / 1',
-                  border: '1px solid black',
-                  visibility: dayIndex < month.days ? 'visible' : 'hidden',
-                  backgroundColor: color
-                  //   backgroundColor: `rgba(0,${testGrid[month.label.toLowerCase()][dayIndex] || 255},0,${(testGrid[month.label.toLowerCase()][dayIndex] || 0) / 4})`
-                }}
-              >
-                {dayIndex + 1}
-              </div>
-            );
-          });
+          const dayCells = Array.from({ length: maxDays }).map(
+            (_, dayIndex) => {
+              const value =
+                goals?.[selectedGoalName]?.data?.[
+                  month?.label?.toLowerCase()
+                ]?.[dayIndex] || undefined;
+
+              const color = value
+                ? `rgba(${colors[selectedGoalIndex % colors.length]},${value ? checkCriteria(value, criteria) : 1})`
+                : transparent;
+
+              return (
+                <div
+                  key={`${monthIndex}-${dayIndex}`}
+                  style={{
+                    margin: '1px',
+                    aspectRatio: '1 / 1',
+                    border: '1px solid black',
+                    visibility: dayIndex < month.days ? 'visible' : 'hidden',
+                    backgroundColor: color
+                  }}
+                >
+                  {dayIndex + 1}
+                </div>
+              );
+            }
+          );
+
+          return [labelCell, ...dayCells];
         })}
       </div>
     </div>

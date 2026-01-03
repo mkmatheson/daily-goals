@@ -1,67 +1,34 @@
-export const maxDaysNoScroll = 23;
+import { goals } from './goalData';
 
-export const currentDaysNoScroll = 1;
-
-export const completedDays: { [key: number]: (number | null)[] } = {
-  1: [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-    22, 23, 24, 25, 26, 27, 28, 29, 30, 31
-  ],
-  2: [
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    null,
-    8,
-    9,
-    10,
-    11,
-    12,
-    13,
-    14,
-    15,
-    16,
-    17,
-    18,
-    19,
-    20,
-    21,
-    null,
-    23,
-    24,
-    25,
-    26,
-    27,
-    28
-  ],
-  3: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, null, 12, null, 14, null, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, null, 29, null, 31],
-  4: [1,2,3,4,5,null,7,8,null,10,11,12,13,14,15,16,17,18,19,null,21,22,23],
-  5: [],
-  6: [],
-  7: [],
-  8: [],
-  9: [],
-  10: [],
-  11: [],
-  12: []
-};
-
-export const currentYear = 2025;
-
-export const months = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December'
+export const colors = [
+  [50, 200, 50],
+  [200, 200, 50],
+  [200, 50, 50],
+  [50, 200, 200],
+  [50, 50, 200],
+  [200, 50, 200]
 ];
+
+const year = new Date().getFullYear();
+
+export const months = Array.from({ length: 12 }, (_, monthIndex) => {
+  const days = new Date(year, monthIndex + 1, 0).getDate();
+  const label = new Date(year, monthIndex, 1).toLocaleString('default', {
+    month: 'short'
+  });
+  return { days, label };
+});
+
+export const maxDays = Math.max(...months.map((m) => m.days));
+
+export const transparent = 'rgba(255,255,255,0)';
+
+export const goalNames = Object.keys(goals);
+
+export const today = new Date();
+export const monthLabel = today
+  .toLocaleString('default', {
+    month: 'short'
+  })
+  .toLowerCase();
+export const dayOfMonth = today.getDate() - 1;

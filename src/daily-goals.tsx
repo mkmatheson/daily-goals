@@ -57,7 +57,7 @@ const DailyGoals = () => {
                   padding: '4px'
                 }}
               >
-                {data[selectedGoalIndex].criteria?.isInverted ? 'less ' : ''}
+                {data[index].criteria?.isInverted ? 'less ' : ''}
                 {name}
               </button>
             </span>

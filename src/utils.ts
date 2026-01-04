@@ -45,7 +45,7 @@ export const getColor = (
   criteria: any,
   showHeatMap: boolean
 ) => {
-  if (value === undefined) {
+  if (value === undefined || (!showHeatMap && value === 0)) {
     return transparent;
   }
   if (showHeatMap) {

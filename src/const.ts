@@ -1,5 +1,3 @@
-import { goals } from './goalData';
-
 export const colors = [
   [50, 200, 50],
   [255, 200, 50],
@@ -28,8 +26,6 @@ export const months = Array.from({ length: 12 }, (_, monthIndex) => {
 export const maxDays = Math.max(...months.map((m) => m.days));
 
 export const transparent = 'rgba(255,255,255,0)';
-
-export const goalNames = Object.keys(goals);
 
 export const monthLabel = today
   .toLocaleString('default', {

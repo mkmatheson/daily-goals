@@ -1,5 +1,5 @@
-import { colors, transparent, goalNames, heatMapColors } from './const';
-import type { Criteria } from './goalData';
+import { colors, transparent, heatMapColors } from './const';
+import type { Criteria } from './goalTypes';
 
 const checkCriteria = (
   value: number,
@@ -22,15 +22,16 @@ const checkCriteria = (
 
 export const handleKeyDown = (
   event: any,
+  goalNum: number,
   callback: (value: React.SetStateAction<number>) => void
 ) => {
   // Check the value of the key property
   switch (event.key) {
     case 'ArrowLeft':
-      callback((prev) => (prev === 0 ? goalNames.length - 1 : prev - 1));
+      callback((prev) => (prev === 0 ? goalNum - 1 : prev - 1));
       break;
     case 'ArrowRight':
-      callback((prev) => (prev === goalNames.length - 1 ? 0 : prev + 1));
+      callback((prev) => (prev === goalNum - 1 ? 0 : prev + 1));
       break;
     default:
       return; // Exit handler if not an arrow key
@@ -46,6 +47,7 @@ export const getColor = (
   criteria: Criteria,
   showHeatMap: boolean
 ) => {
+  
   if (value === undefined || (!showHeatMap && value <= criteria.values[-1])) {
     return transparent;
   }

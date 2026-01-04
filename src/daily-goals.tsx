@@ -1,16 +1,30 @@
-import { useState, useEffect } from 'react';
-import { goals } from './goalData';
-import { months, maxDays, goalNames, monthLabel, dayOfMonth } from './const';
+import { useState, useEffect, useRef } from 'react';
+import { months, maxDays, monthLabel, dayOfMonth } from './const';
 import { handleKeyDown, getColor } from './utils';
+import { defaultCriteria, type Goal } from './goalTypes';
 
 const DailyGoals = () => {
+  const [data, setData] = useState<Goal[]>([]);
+
   const [selectedGoalIndex, setSelectedGoalIndex] = useState<number>(0);
   const [showHeatMap, setShowHeatMap] = useState<boolean>(false);
-  const selectedGoalName = goalNames[selectedGoalIndex];
 
-  const criteria = goals[selectedGoalName].criteria;
+  useEffect(() => {
+    let ignore = false;
+    fetch('https://cdn.jsdelivr.net/gh/mkmatheson/data@latest/goalData.json')
+      .then((response) => response.json())
+      .then((json) => {
+        if (!ignore) {
+          setData(json);
+        }
+      });
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
   function handleKeyDownEvent(event: any) {
-    handleKeyDown(event, setSelectedGoalIndex);
+    handleKeyDown(event, data.length, setSelectedGoalIndex);
   }
 
   useEffect(() => {
@@ -23,14 +37,15 @@ const DailyGoals = () => {
     };
   }, []); // Empty dependency array ensures it runs once on mount and once on unmount
 
-  return (
+  return data?.length ? (
     <div>
       <div>
-        {goalNames.map((goalName, index) => {
+        {data.map(({ name }, index) => {
           const hasTodayData =
-            goals[goalName]?.data?.[monthLabel]?.[dayOfMonth] !== undefined;
+            data[selectedGoalIndex]?.data?.[monthLabel]?.[dayOfMonth] !==
+            undefined;
           return (
-            <span key={goalName} style={{ margin: '8px' }}>
+            <span key={name} style={{ margin: '8px' }}>
               <button
                 onClick={() => setSelectedGoalIndex(index)}
                 type="button"
@@ -42,8 +57,8 @@ const DailyGoals = () => {
                   padding: '4px'
                 }}
               >
-                {goals[goalName].criteria.isInverted ? 'less ' : ''}
-                {goalName}
+                {data[selectedGoalIndex].criteria?.isInverted ? 'less ' : ''}
+                {name}
               </button>
             </span>
           );
@@ -89,11 +104,11 @@ const DailyGoals = () => {
                     border: '1px solid black',
                     visibility: dayIndex < month.days ? 'visible' : 'hidden',
                     backgroundColor: getColor(
-                      goals?.[selectedGoalName]?.data?.[
+                      data[selectedGoalIndex]?.data?.[
                         month?.label?.toLowerCase()
                       ]?.[dayIndex], // get value of the individual day
                       selectedGoalIndex,
-                      criteria,
+                      data[selectedGoalIndex].criteria || defaultCriteria,
                       showHeatMap
                     )
                   }}
@@ -108,6 +123,8 @@ const DailyGoals = () => {
         })}
       </div>
     </div>
+  ) : (
+    <div />
   );
 };
 

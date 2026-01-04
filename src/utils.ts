@@ -45,19 +45,27 @@ export const getColor = (
   criteria: any,
   showHeatMap: boolean
 ) => {
-  if (value === undefined || (!showHeatMap && value === 0)) {
+  if (
+    value === undefined ||
+    (!showHeatMap && !criteria.isInverted && value === 0)
+  ) {
     return transparent;
   }
+
+  const percentile = checkCriteria(value, criteria);
+
   if (showHeatMap) {
     {
-      if (value == 0) {
-        return `rgba(${heatMapColors[0]},1)`;
+      if (value == 0 && !criteria.isInverted) {
+        return `#${heatMapColors[0]}`;
       }
-      const bucket = Math.floor(
-        checkCriteria(value, criteria) * (heatMapColors.length - 1)
-      );
-      return `rgba(${heatMapColors[bucket]},1)`;
+
+      const bucket =
+        percentile === 1
+          ? heatMapColors.length - 1
+          : Math.floor(percentile * heatMapColors.length);
+      return `#${heatMapColors[bucket]}`;
     }
   }
-  return `rgba(${colors[selectedGoalIndex % colors.length]},${value ? checkCriteria(value, criteria) : 1})`;
+  return `rgba(${colors[selectedGoalIndex % colors.length]},${value ? percentile : 1})`;
 };

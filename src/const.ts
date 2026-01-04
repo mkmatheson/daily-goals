@@ -9,16 +9,7 @@ export const colors = [
   [200, 50, 200]
 ];
 
-// blue 2C5C8A
-// orange 9E3C22
-// gray DAD5C8
-export const heatMapColors = [
-  '158, 60, 34',
-  '246, 144, 53',
-  '218, 213, 200',
-  '119, 172, 212',
-  '44, 92, 138'
-];
+export const heatMapColors = ['D30909', 'E96905', 'FFC800', '83BC1A', '07B034'];
 
 export const today = new Date(
   new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })

@@ -25,7 +25,7 @@ const defaultCriteria: Criteria = {
 const foil: Goal = {
   criteria: defaultCriteria,
   data: {
-    jan: [1, 30, 5],
+    jan: [1, 30, 15],
     feb: [],
     mar: [],
     apr: [],
@@ -194,7 +194,7 @@ const meditation: Goal = {
 const animation: Goal = {
   criteria: defaultCriteria,
   data: {
-    jan: [0, 0],
+    jan: [0, 0, 27],
     feb: [],
     mar: [],
     apr: [],
@@ -246,7 +246,7 @@ const sleep: Goal = {
 };
 
 const gaming: Goal = {
-  criteria: { values: [60, 45, 30, 15], isInverted: true },
+  criteria: { values: [60, 45, 30, 15, 0], isInverted: true },
   data: {
     jan: [240, 23, 12.5],
     feb: [],
@@ -302,7 +302,7 @@ const howIWasFeeling: Goal = {
 const days: Goal = {
   criteria: { values: [1, 0], isInverted: false },
   data: {
-    jan: [1, 1],
+    jan: [1, 1, 1],
     feb: [],
     mar: [],
     apr: [],

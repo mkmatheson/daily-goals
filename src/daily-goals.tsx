@@ -5,7 +5,7 @@ import { handleKeyDown, getColor } from './utils';
 
 const DailyGoals = () => {
   const [selectedGoalIndex, setSelectedGoalIndex] = useState<number>(0);
-  const [showHeatMap, setShowHeatMap] = useState<boolean>(true);
+  const [showHeatMap, setShowHeatMap] = useState<boolean>(false);
   const selectedGoalName = goalNames[selectedGoalIndex];
 
   const criteria = goals[selectedGoalName].criteria;
@@ -80,10 +80,6 @@ const DailyGoals = () => {
 
           const dayCells = Array.from({ length: maxDays }).map(
             (_, dayIndex) => {
-              const value =
-                goals?.[selectedGoalName]?.data?.[
-                  month?.label?.toLowerCase()
-                ]?.[dayIndex];
               return (
                 <div
                   key={`${monthIndex}-${dayIndex}`}
@@ -93,7 +89,9 @@ const DailyGoals = () => {
                     border: '1px solid black',
                     visibility: dayIndex < month.days ? 'visible' : 'hidden',
                     backgroundColor: getColor(
-                      value,
+                      goals?.[selectedGoalName]?.data?.[
+                        month?.label?.toLowerCase()
+                      ]?.[dayIndex], // get value of the individual day
                       selectedGoalIndex,
                       criteria,
                       showHeatMap

@@ -1,6 +1,8 @@
 type Data = { [key: string]: number[] };
 type Criteria = { values: number[]; isInverted?: boolean };
 
+const exampleSpectrum = [0, 1, 11, 21, 29, 31];
+
 type Goal = {
   data: Data;
   criteria: Criteria;
@@ -19,7 +21,7 @@ const defaultCriteria: Criteria = {
 const foil: Goal = {
   criteria: defaultCriteria,
   data: {
-    jan: [1, 30],
+    jan: [1, 30, 5],
     feb: [],
     mar: [],
     apr: [],
@@ -43,7 +45,7 @@ const foil: Goal = {
 const movement: Goal = {
   criteria: defaultCriteria,
   data: {
-    jan: [45, 85],
+    jan: [45, 85, 40],
     feb: [],
     mar: [],
     apr: [],
@@ -66,7 +68,7 @@ const movement: Goal = {
 const music: Goal = {
   criteria: defaultCriteria,
   data: {
-    jan: [2, 60],
+    jan: [2, 60, 10],
     feb: [],
     mar: [],
     apr: [],
@@ -84,7 +86,7 @@ const music: Goal = {
 const stretch: Goal = {
   criteria: defaultCriteria,
   data: {
-    jan: [19, 15],
+    jan: [19, 15, 8],
     feb: [],
     mar: [],
     apr: [],
@@ -106,7 +108,7 @@ const stretch: Goal = {
 const juggle: Goal = {
   criteria: defaultCriteria,
   data: {
-    jan: [2, 5],
+    jan: [2, 5, 2],
     feb: [],
     mar: [],
     apr: [],
@@ -129,7 +131,7 @@ const juggle: Goal = {
 const transport: Goal = {
   criteria: defaultCriteria,
   data: {
-    jan: [2, 2],
+    jan: [2, 2, 1],
     feb: [],
     mar: [],
     apr: [],
@@ -146,6 +148,7 @@ const transport: Goal = {
 
 /** words
  * reading
+ * writing
  * word game
  */
 const word: Goal = {
@@ -169,7 +172,43 @@ const word: Goal = {
 const meditation: Goal = {
   criteria: defaultCriteria,
   data: {
-    jan: [8, 5],
+    jan: [8, 5, 10],
+    feb: [],
+    mar: [],
+    apr: [],
+    may: [],
+    jun: [],
+    jul: [],
+    aug: [],
+    sep: [],
+    oct: [],
+    nov: [],
+    dec: []
+  }
+};
+
+const animation: Goal = {
+  criteria: defaultCriteria,
+  data: {
+    jan: [0, 0],
+    feb: [],
+    mar: [],
+    apr: [],
+    may: [],
+    jun: [],
+    jul: [],
+    aug: [],
+    sep: [],
+    oct: [],
+    nov: [],
+    dec: []
+  }
+};
+
+const language: Goal = {
+  criteria: defaultCriteria,
+  data: {
+    jan: [0, 0, 2],
     feb: [],
     mar: [],
     apr: [],
@@ -223,7 +262,7 @@ const gaming: Goal = {
 const browsing: Goal = {
   criteria: { values: [30, 20, 10, 1, 0], isInverted: true },
   data: {
-    jan: [40, 40],
+    jan: [40, 60],
     feb: [],
     mar: [],
     apr: [],
@@ -265,6 +304,8 @@ export const goals: { [key: string]: Goal } = {
   transport,
   word,
   meditation,
+  animation,
+  language,
   sleep,
   gaming,
   browsing,

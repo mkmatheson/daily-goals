@@ -1,6 +1,6 @@
-import { goalNames } from './const';
+import { colors, transparent, goalNames, heatMapColors } from './const';
 
-export const checkCriteria = (
+const checkCriteria = (
   value: number,
   criteria: { values: number[]; isInverted?: boolean }
 ) => {
@@ -39,3 +39,25 @@ export const handleKeyDown = (
   event.preventDefault();
 };
 
+export const getColor = (
+  value: number | undefined,
+  selectedGoalIndex: number,
+  criteria: any,
+  showHeatMap: boolean
+) => {
+  if (value === undefined) {
+    return transparent;
+  }
+  if (showHeatMap) {
+    {
+      if (value == 0) {
+        return `rgba(${heatMapColors[0]},1)`;
+      }
+      const bucket = Math.floor(
+        checkCriteria(value, criteria) * (heatMapColors.length - 1)
+      );
+      return `rgba(${heatMapColors[bucket]},1)`;
+    }
+  }
+  return `rgba(${colors[selectedGoalIndex % colors.length]},${value ? checkCriteria(value, criteria) : 1})`;
+};

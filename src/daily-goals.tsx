@@ -1,18 +1,11 @@
 import { useState, useEffect } from 'react';
 import { goals } from './goalData';
-import {
-  colors,
-  months,
-  maxDays,
-  transparent,
-  goalNames,
-  monthLabel,
-  dayOfMonth
-} from './const';
-import { checkCriteria, handleKeyDown } from './utils';
+import { months, maxDays, goalNames, monthLabel, dayOfMonth } from './const';
+import { handleKeyDown, getColor } from './utils';
 
 const DailyGoals = () => {
   const [selectedGoalIndex, setSelectedGoalIndex] = useState<number>(0);
+  const [showHeatMap, setShowHeatMap] = useState<boolean>(true);
   const selectedGoalName = goalNames[selectedGoalIndex];
 
   const criteria = goals[selectedGoalName].criteria;
@@ -55,6 +48,12 @@ const DailyGoals = () => {
             </span>
           );
         })}
+        <input
+          type="checkbox"
+          onChange={() => setShowHeatMap(!showHeatMap)}
+          checked={showHeatMap}
+        />
+        <label style={{ marginLeft: '4px' }}>Heat Map</label>
       </div>
       <div
         style={{
@@ -84,12 +83,7 @@ const DailyGoals = () => {
               const value =
                 goals?.[selectedGoalName]?.data?.[
                   month?.label?.toLowerCase()
-                ]?.[dayIndex] || undefined;
-
-              const color = value
-                ? `rgba(${colors[selectedGoalIndex % colors.length]},${value ? checkCriteria(value, criteria) : 1})`
-                : transparent;
-
+                ]?.[dayIndex];
               return (
                 <div
                   key={`${monthIndex}-${dayIndex}`}
@@ -98,7 +92,12 @@ const DailyGoals = () => {
                     aspectRatio: '1 / 1',
                     border: '1px solid black',
                     visibility: dayIndex < month.days ? 'visible' : 'hidden',
-                    backgroundColor: color
+                    backgroundColor: getColor(
+                      value,
+                      selectedGoalIndex,
+                      criteria,
+                      showHeatMap
+                    )
                   }}
                 >
                   {dayIndex + 1}

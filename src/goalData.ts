@@ -1,7 +1,11 @@
 type Data = { [key: string]: number[] };
 type Criteria = { values: number[]; isInverted?: boolean };
 
-const exampleSpectrum = [0, 1, 11, 21, 29, 31];
+const exampleSpectrum = [0, 1, 11, 21, 31];
+const extendedExampleSpectrum = [
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+  22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
+];
 
 type Goal = {
   data: Data;
@@ -154,7 +158,7 @@ const transport: Goal = {
 const word: Goal = {
   criteria: defaultCriteria,
   data: {
-    jan: [10, 60],
+    jan: [10, 60, 45],
     feb: [],
     mar: [],
     apr: [],
@@ -226,7 +230,7 @@ const language: Goal = {
 const sleep: Goal = {
   criteria: { values: [8, 7, 6, 5, 0], isInverted: false },
   data: {
-    jan: [5, 8],
+    jan: [5, 8, 7.5],
     feb: [],
     mar: [],
     apr: [],
@@ -244,7 +248,7 @@ const sleep: Goal = {
 const gaming: Goal = {
   criteria: { values: [60, 45, 30, 15], isInverted: true },
   data: {
-    jan: [240, 23],
+    jan: [240, 23, 12.5],
     feb: [],
     mar: [],
     apr: [],
@@ -262,7 +266,25 @@ const gaming: Goal = {
 const browsing: Goal = {
   criteria: { values: [30, 20, 10, 1, 0], isInverted: true },
   data: {
-    jan: [40, 60],
+    jan: [40, 60, 25],
+    feb: [],
+    mar: [],
+    apr: [],
+    may: [],
+    jun: [],
+    jul: [],
+    aug: [],
+    sep: [],
+    oct: [],
+    nov: [],
+    dec: []
+  }
+};
+
+const howIWasFeeling: Goal = {
+  criteria: { values: [9, 8, 7, 6, 5, 4, 3, 2, 1, 0], isInverted: false },
+  data: {
+    jan: [6, 7, 7],
     feb: [],
     mar: [],
     apr: [],
@@ -309,5 +331,6 @@ export const goals: { [key: string]: Goal } = {
   sleep,
   gaming,
   browsing,
+  howIWasFeeling,
   days
 };

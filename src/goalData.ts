@@ -1,5 +1,5 @@
 type Data = { [key: string]: number[] };
-type Criteria = { values: number[]; isInverted?: boolean };
+export type Criteria = { values: number[]; isInverted?: boolean };
 
 const exampleSpectrum = [0, 1, 11, 21, 31];
 const extendedExampleSpectrum = [

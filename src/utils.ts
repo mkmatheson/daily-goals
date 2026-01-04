@@ -1,4 +1,5 @@
 import { colors, transparent, goalNames, heatMapColors } from './const';
+import type { Criteria } from './goalData';
 
 const checkCriteria = (
   value: number,
@@ -42,13 +43,10 @@ export const handleKeyDown = (
 export const getColor = (
   value: number | undefined,
   selectedGoalIndex: number,
-  criteria: any,
+  criteria: Criteria,
   showHeatMap: boolean
 ) => {
-  if (
-    value === undefined ||
-    (!showHeatMap && !criteria.isInverted && value === 0)
-  ) {
+  if (value === undefined || (!showHeatMap && value <= criteria.values[-1])) {
     return transparent;
   }
 
@@ -56,7 +54,7 @@ export const getColor = (
 
   if (showHeatMap) {
     {
-      if (value == 0 && !criteria.isInverted) {
+      if (value <= criteria.values[-1]) {
         return `#${heatMapColors[0]}`;
       }
 

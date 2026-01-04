@@ -9,7 +9,11 @@ export const colors = [
   [200, 50, 200]
 ];
 
-const year = new Date().getFullYear();
+export const today = new Date(
+  new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })
+);
+
+const year = today.getFullYear();
 
 export const months = Array.from({ length: 12 }, (_, monthIndex) => {
   const days = new Date(year, monthIndex + 1, 0).getDate();
@@ -25,7 +29,6 @@ export const transparent = 'rgba(255,255,255,0)';
 
 export const goalNames = Object.keys(goals);
 
-export const today = new Date();
 export const monthLabel = today
   .toLocaleString('default', {
     month: 'short'

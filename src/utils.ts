@@ -1,3 +1,4 @@
+import type { SetURLSearchParams } from 'react-router';
 import { colors, transparent, heatMapColors } from './const';
 import type { Criteria } from './goalTypes';
 
@@ -26,15 +27,24 @@ export const checkCriteria = (
 export const handleKeyDown = (
   event: any,
   goalNum: number,
-  callback: (value: React.SetStateAction<number>) => void
+  stateCallback: (value: React.SetStateAction<number>) => void,
+  paramsCallback: SetURLSearchParams
 ) => {
   // Check the value of the key property
   switch (event.key) {
     case 'ArrowLeft':
-      callback((prev) => (prev === 0 ? goalNum - 1 : prev - 1));
+      stateCallback((prev) => {
+        const newValue = prev === 0 ? goalNum - 1 : prev - 1;
+        paramsCallback({ goal: newValue.toString() });
+        return newValue;
+      });
       break;
     case 'ArrowRight':
-      callback((prev) => (prev === goalNum - 1 ? 0 : prev + 1));
+      stateCallback((prev) => {
+        const newValue = prev === goalNum - 1 ? 0 : prev + 1;
+        paramsCallback({ goal: newValue.toString() });
+        return newValue;
+      });
       break;
     default:
       return; // Exit handler if not an arrow key

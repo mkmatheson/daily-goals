@@ -1,13 +1,15 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { months, maxDays, monthLabel, dayOfMonth } from './const';
 import { handleKeyDown, getColor, checkCriteria } from './utils';
 import { defaultCriteria, type Goal } from './goalTypes';
+import { useSearchParams } from 'react-router';
 
 const DailyGoals = () => {
   const [data, setData] = useState<Goal[]>([]);
 
   const [selectedGoalIndex, setSelectedGoalIndex] = useState<number>(0);
   const [showHeatMap, setShowHeatMap] = useState<boolean>(false);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     let ignore = false;
@@ -35,8 +37,15 @@ const DailyGoals = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const goalParam = searchParams.get('goal');
+    if (goalParam !== null) {
+      setSelectedGoalIndex(parseInt(goalParam));
+    }
+  }, []);
+
   function handleKeyDownEvent(event: any) {
-    handleKeyDown(event, data.length, setSelectedGoalIndex);
+    handleKeyDown(event, data.length, setSelectedGoalIndex, setSearchParams);
   }
 
   useEffect(() => {
@@ -61,7 +70,10 @@ const DailyGoals = () => {
           return (
             <span key={name} style={{ margin: '8px' }}>
               <button
-                onClick={() => setSelectedGoalIndex(index)}
+                onClick={() => {
+                  setSelectedGoalIndex(index);
+                  setSearchParams({ goal: index.toString() });
+                }}
                 type="button"
                 style={{
                   border: '1px solid black',
@@ -112,18 +124,21 @@ const DailyGoals = () => {
 
           const dayCells = Array.from({ length: maxDays }).map(
             (_, dayIndex) => {
+              const value =
+                data[selectedGoalIndex]?.data?.[month?.label?.toLowerCase()]?.[
+                  dayIndex
+                ];
               return (
                 <div
                   key={`${monthIndex}-${dayIndex}`}
                   style={{
                     margin: '1px',
                     aspectRatio: '1 / 1',
+                    padding: '2px',
                     border: '1px solid black',
                     visibility: dayIndex < month.days ? 'visible' : 'hidden',
                     backgroundColor: getColor(
-                      data[selectedGoalIndex]?.data?.[
-                        month?.label?.toLowerCase()
-                      ]?.[dayIndex], // get value of the individual day
+                      value,
                       selectedGoalIndex,
                       data[selectedGoalIndex].criteria || defaultCriteria,
                       showHeatMap
@@ -131,6 +146,16 @@ const DailyGoals = () => {
                   }}
                 >
                   {dayIndex + 1}
+                  <div
+                    style={{
+                      fontSize: '8px',
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'end'
+                    }}
+                  >
+                    {value}
+                  </div>
                 </div>
               );
             }

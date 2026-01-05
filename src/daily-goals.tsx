@@ -13,7 +13,6 @@ const DailyGoals = () => {
 
   useEffect(() => {
     let ignore = false;
-    console.log(process.env.NODE_ENV);
     if (process.env.NODE_ENV === 'development' && !ignore) {
       import('../../data/goalData.json').then((data) => {
         if (data['default']) {
@@ -44,8 +43,9 @@ const DailyGoals = () => {
     }
   }, []);
 
+  // TODO: remind self why this can't be an anonymous function
   function handleKeyDownEvent(event: any) {
-    handleKeyDown(event, data.length, setSelectedGoalIndex, setSearchParams);
+    handleKeyDown(event, setSelectedGoalIndex, setSearchParams);
   }
 
   useEffect(() => {

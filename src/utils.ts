@@ -26,7 +26,6 @@ export const checkCriteria = (
 
 export const handleKeyDown = (
   event: any,
-  goalNum: number,
   stateCallback: (value: React.SetStateAction<number>) => void,
   paramsCallback: SetURLSearchParams
 ) => {
@@ -34,14 +33,16 @@ export const handleKeyDown = (
   switch (event.key) {
     case 'ArrowLeft':
       stateCallback((prev) => {
-        const newValue = prev === 0 ? goalNum - 1 : prev - 1;
+        // TODO: this is bad hardcoding but it's what I'm doing for now
+        const newValue = prev === 0 ? 14 : prev - 1;
         paramsCallback({ goal: newValue.toString() });
         return newValue;
       });
       break;
     case 'ArrowRight':
       stateCallback((prev) => {
-        const newValue = prev === goalNum - 1 ? 0 : prev + 1;
+        // TODO: this is bad hardcoding but it's what I'm doing for now
+        const newValue = prev == 14 ? 0 : prev + 1;
         paramsCallback({ goal: newValue.toString() });
         return newValue;
       });
@@ -60,7 +61,10 @@ export const getColor = (
   criteria: Criteria,
   showHeatMap: boolean
 ) => {
-  if (value === undefined || (!showHeatMap && value <= criteria.values[-1])) {
+  if (
+    value === undefined ||
+    (!showHeatMap && value <= (criteria.values.at(-1) ?? 0))
+  ) {
     return transparent;
   }
 
@@ -68,7 +72,7 @@ export const getColor = (
 
   if (showHeatMap) {
     {
-      if (value <= criteria.values[-1]) {
+      if (value <= (criteria.values.at(-1) ?? 0)) {
         return `#${heatMapColors[0]}`;
       }
 

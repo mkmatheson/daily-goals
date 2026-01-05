@@ -11,6 +11,18 @@ const DailyGoals = () => {
 
   useEffect(() => {
     let ignore = false;
+    console.log(process.env.NODE_ENV);
+    if (process.env.NODE_ENV === 'development' && !ignore) {
+      import('../../data/goalData.json').then((data) => {
+        if (data['default']) {
+          setData(data['default'] as Goal[]);
+        }
+      });
+      return () => {
+        ignore = true;
+      };
+    }
+
     fetch('https://cdn.jsdelivr.net/gh/mkmatheson/data@latest/goalData.json')
       .then((response) => response.json())
       .then((json) => {

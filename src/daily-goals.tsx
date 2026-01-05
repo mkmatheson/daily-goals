@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { months, maxDays, monthLabel, dayOfMonth } from './const';
-import { handleKeyDown, getColor } from './utils';
+import { handleKeyDown, getColor, checkCriteria } from './utils';
 import { defaultCriteria, type Goal } from './goalTypes';
 
 const DailyGoals = () => {
@@ -41,9 +41,11 @@ const DailyGoals = () => {
     <div>
       <div>
         {data.map(({ name }, index) => {
-          const hasTodayData =
-            data[selectedGoalIndex]?.data?.[monthLabel]?.[dayOfMonth] !==
-            undefined;
+          const todayData = data[index]?.data?.[monthLabel]?.[dayOfMonth];
+          const percentile = checkCriteria(
+            todayData,
+            data[index].criteria || defaultCriteria
+          );
           return (
             <span key={name} style={{ margin: '8px' }}>
               <button
@@ -53,7 +55,10 @@ const DailyGoals = () => {
                   border: '1px solid black',
                   backgroundColor:
                     selectedGoalIndex === index ? 'lightblue' : 'white',
-                  color: hasTodayData ? 'black' : 'red',
+                  color:
+                    todayData !== undefined
+                      ? `rgb(${255 * (1 - percentile)}, 0, 0)`
+                      : 'red',
                   padding: '4px'
                 }}
               >

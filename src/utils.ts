@@ -1,10 +1,13 @@
 import { colors, transparent, heatMapColors } from './const';
 import type { Criteria } from './goalTypes';
 
-const checkCriteria = (
-  value: number,
+export const checkCriteria = (
+  value: number | undefined,
   criteria: { values: number[]; isInverted?: boolean }
 ) => {
+  if (value === undefined) {
+    return 0;
+  }
   const { values } = criteria;
   const intervals = values.length - 1;
 
@@ -47,7 +50,6 @@ export const getColor = (
   criteria: Criteria,
   showHeatMap: boolean
 ) => {
-  
   if (value === undefined || (!showHeatMap && value <= criteria.values[-1])) {
     return transparent;
   }

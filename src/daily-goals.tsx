@@ -40,7 +40,7 @@ const DailyGoals = () => {
     const goalParam = searchParams.get('goal');
     if (goalParam !== null) {
       const goalIndex = parseInt(goalParam);
-      if (goalIndex < 0) {
+      if (goalIndex < 0 || Number.isNaN(goalIndex)) {
         setSearchParams({ goal: '0' });
         setSelectedGoalIndex(0);
       } else if (goalIndex > 14) {

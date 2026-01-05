@@ -57,7 +57,7 @@ const DailyGoals = () => {
                     selectedGoalIndex === index ? 'lightblue' : 'white',
                   color:
                     todayData !== undefined
-                      ? `rgb(${255 * (1 - percentile)}, 0, 0)`
+                      ? `rgb(${255 * (1 - percentile)}, ${130 * (1 - percentile)}, 0)`
                       : 'red',
                   padding: '4px'
                 }}

@@ -61,9 +61,10 @@ export const getColor = (
   criteria: Criteria,
   showHeatMap: boolean
 ) => {
+  const endValue = criteria.values.at(-1) ?? 0;
   if (
     value === undefined ||
-    (!showHeatMap && value <= (criteria.values.at(-1) ?? 0))
+    (!showHeatMap && value <= endValue && !criteria.isInverted)
   ) {
     return transparent;
   }

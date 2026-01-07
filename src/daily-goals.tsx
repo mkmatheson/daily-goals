@@ -173,6 +173,7 @@ const DailyGoals = () => {
           return [labelCell, ...dayCells];
         })}
       </div>
+      {/* TODO: add line chart */}
     </div>
   ) : (
     <div />

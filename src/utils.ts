@@ -74,6 +74,9 @@ export const getColor = (
   if (showHeatMap) {
     {
       if (value <= (criteria.values.at(-1) ?? 0)) {
+        if (criteria.isInverted) {
+          return `#${heatMapColors.at(-1)}`;
+        }
         return `#${heatMapColors[0]}`;
       }
 

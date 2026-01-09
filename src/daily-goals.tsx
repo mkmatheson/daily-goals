@@ -70,6 +70,7 @@ const DailyGoals = () => {
   return data?.length ? (
     <div>
       <div>
+        {/* TODO: rank data by downward trending */}
         {data.map(({ name }, index) => {
           const todayData = data[index]?.data?.[monthLabel]?.[dayOfMonth];
           const percentile = checkCriteria(

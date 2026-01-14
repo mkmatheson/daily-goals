@@ -16,7 +16,9 @@ const DailyGoals = () => {
     if (process.env.NODE_ENV === 'development' && !ignore) {
       import('../../data/goalData.json').then((data) => {
         if (data['default']) {
-          setData(data['default'] as Goal[]);
+          setData(
+            data['default'].filter((goal) => goal && !goal.isDisabled) as Goal[]
+          );
         }
       });
       return () => {

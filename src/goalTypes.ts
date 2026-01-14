@@ -11,6 +11,7 @@ export type Goal = {
   data: Data;
   name: string;
   criteria: Criteria;
+  isDisabled?: boolean;
 };
 
 export const defaultCriteria: Criteria = {

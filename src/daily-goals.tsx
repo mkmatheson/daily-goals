@@ -15,24 +15,23 @@ const DailyGoals = () => {
     let ignore = false;
     if (process.env.NODE_ENV === 'development' && !ignore) {
       import('../../data/goalData.json').then((data) => {
-        if (data['default']) {
+        if (!ignore && data['default']) {
           setData(
-            data['default'].filter((goal) => goal && !goal.isDisabled) as Goal[]
+            (data['default'] as Goal[]).filter(
+              (goal) => goal && !goal.isDisabled
+            )
           );
         }
       });
-      return () => {
-        ignore = true;
-      };
+    } else {
+      fetch('https://cdn.jsdelivr.net/gh/mkmatheson/data@latest/goalData.json')
+        .then((response) => response.json())
+        .then((json: Goal[]) => {
+          if (!ignore && json) {
+            setData(json.filter((goal) => goal && !goal.isDisabled));
+          }
+        });
     }
-
-    fetch('https://cdn.jsdelivr.net/gh/mkmatheson/data@latest/goalData.json')
-      .then((response) => response.json())
-      .then((json) => {
-        if (!ignore) {
-          setData(json);
-        }
-      });
     return () => {
       ignore = true;
     };
@@ -158,6 +157,7 @@ const DailyGoals = () => {
                   }}
                 >
                   {dayIndex + 1}
+                  {/* todo: add day of week */}
                   <div
                     style={{
                       fontSize: '8px',

@@ -40,13 +40,14 @@ const DailyGoals = () => {
   useEffect(() => {
     const goalParam = searchParams.get('goal');
     if (goalParam !== null) {
+      const numGoals = data.length;
       const goalIndex = parseInt(goalParam);
       if (goalIndex < 0 || Number.isNaN(goalIndex)) {
         setSearchParams({ goal: '0' });
         setSelectedGoalIndex(0);
-      } else if (goalIndex > 14) {
-        setSearchParams({ goal: '14' });
-        setSelectedGoalIndex(14);
+      } else if (goalIndex > numGoals) {
+        setSearchParams({ goal: numGoals.toString() });
+        setSelectedGoalIndex(numGoals);
       } else {
         setSelectedGoalIndex(parseInt(goalParam));
       }
